@@ -1,11 +1,10 @@
 import time
-import local_settings as settings
 from planfix import *
 from mikrotik import *
+import traceback
 
 
 def main():
-
     status_id_dp = settings.status_id_dp
     host_ip = settings.host_ip
     username = settings.username
@@ -40,4 +39,14 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+
+    while True:
+        try:
+            print(f"Запуск скрипта в {time.strftime('%Y-%m-%d %H:%M:%S')}")
+            main()
+            print(f"Скрипт отработал. Следующий запуск через 3 часа.")
+        except Exception as e:
+            print(f"Ошибка выполнения: {str(e)}")
+            traceback.print_exc()
+
+        time.sleep(3 * 60 * 60)
