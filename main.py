@@ -5,11 +5,8 @@ from mikrotik import *
 
 
 def main():
-    # planfix_token = settings.planfix_token
-    # planfix_username = settings.planfix_username
-    # id = "5448"
-    # report_get_data_by_id(id)
 
+    status_id_dp = settings.status_id_dp
     host_ip = settings.host_ip
     username = settings.username
     password = settings.password
@@ -19,8 +16,10 @@ def main():
 
     status_id = report_get_by_req_id(req_id)
     time.sleep(1)
-    commands = report_get_data_by_id(status_id)
-    print(commands)
+
+    commands = report_get_data_by_id(status_id)[0]
+    list_id_of_task = report_get_data_by_id(status_id)[1]
+
     time.sleep(1)
     command_final = "\n".join(commands)
 
@@ -28,11 +27,16 @@ def main():
     if ssh:
         output = execute_command(ssh, command_final)
         if output is not None:
-            print("response: ")
+            print("response from router: ")
             print(output.strip() if output else "")
         ssh.close()
     else:
         print("Не удалось подключиться")
+
+    time.sleep(1)
+    for ids in list_id_of_task:
+        print(ids)
+        status_changing(ids, status_id_dp)
 
 
 if __name__ == "__main__":
