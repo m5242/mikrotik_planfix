@@ -20,8 +20,8 @@ def report_get_by_req_id(req_id):
         print(response.text)
 
 
-def report_get_data_by_id(id):
-    url = f"https://engineering.planfix.ru/rest/report/26000/save/{str(id)}/data?chunk=0"
+def report_get_data_by_id(id, rep_id):
+    url = f"https://engineering.planfix.ru/rest/report/{str(rep_id)}/save/{str(id)}/data?chunk=0"
     headers = {
         "Authorization": f"Bearer {planfix_token}",
         "Accept": "application/json"
@@ -31,7 +31,6 @@ def report_get_data_by_id(id):
 
     if response.status_code == 200:
         data = response.json()
-
 
         headers = data['data']['rows'][0]['items']
         column_index = next(index for index, item in enumerate(headers) if item['text'] == 'Номер задачи')
@@ -52,9 +51,9 @@ def report_get_data_by_id(id):
         print(response.text)
 
 
-def generate_report():
+def generate_report(rep_id):
     try:
-        generate_url = "https://engineering.planfix.ru/rest/report/26000/generate"
+        generate_url = f"https://engineering.planfix.ru/rest/report/{str(rep_id)}/generate"
         headers = {
             "Authorization": f"Bearer {planfix_token}",
             "Accept": "application/json"
@@ -71,7 +70,39 @@ def generate_report():
 
     except requests.exceptions.RequestException as e:
         print(f"Ошибка при генерации отчёта: {str(e)}")
-        return (False, None)
+        return False, None
+
+
+def report_get_data_by_id_for_term(id, rep_id):
+    url = f"https://engineering.planfix.ru/rest/report/{str(rep_id)}/save/{str(id)}/data?chunk=0"
+    headers = {
+        "Authorization": f"Bearer {planfix_token}",
+        "Accept": "application/json"
+    }
+
+    response = requests.post(url, headers=headers)
+
+    if response.status_code == 200:
+        data = response.json()
+
+        headers = data['data']['rows'][0]['items']
+
+        task_number_index = next(index for index, item in enumerate(headers) if item['text'] == 'Номер задачи')
+        command_index = next(
+            index for index, item in enumerate(headers) if item['text'] == 'Команда для маршрутизатора')
+
+        task_numbers = []
+        commands = []
+        for row in data['data']['rows'][1:]:
+            if row['type'] == 'Normal':
+                task_numbers.append(row['items'][task_number_index]['text'])
+                commands.append(row['items'][command_index]['text'])
+
+        return commands, task_numbers
+    else:
+        print(f"Ошибка: {response.status_code}")
+        print(response.text)
+        return None, None
 
 
 def status_changing(task_id, status_id):
