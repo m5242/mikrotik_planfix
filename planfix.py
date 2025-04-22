@@ -1,5 +1,5 @@
 import requests
-import local_settings as settings
+import config as settings
 
 planfix_token = settings.planfix_token
 
