@@ -16,7 +16,7 @@ status_id_fin = settings.status_id_fin
 
 def granting_access():
     try:
-        print(f"Запуск granting_access в {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Start granting_access at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         req_id = generate_report(granting_access_report_id)
         time.sleep(10)
 
@@ -37,20 +37,20 @@ def granting_access():
                 print(output.strip() if output else "")
             ssh.close()
         else:
-            print("Не удалось подключиться")
+            print("Cannot connect")
 
         time.sleep(1)
         for ids in list_id_of_task:
             print(ids)
             status_changing(ids, status_id_dp)
-        print("Скрипт granting_access отработал.\n\n")
+        print("Script granting_access finished.\n\n")
     except Exception as e:
-        print(f"Ошибка при выполнении скрипта: {e}\n\n")
+        print(f"Executing script error: {e}\n\n")
 
 
 def terminating_access():
     try:
-        print(f"Запуск terminating_access в {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Start terminating_access at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         req_id = generate_report(terminating_access_report_id)
         time.sleep(10)
 
@@ -71,15 +71,15 @@ def terminating_access():
                 print(output.strip() if output else "")
             ssh.close()
         else:
-            print("Не удалось подключиться")
+            print("Cannot connect")
 
         time.sleep(1)
         for ids in list_id_of_task:
             print(ids)
             status_changing(ids, status_id_fin)
-        print("Скрипт terminating_access отработал.\n\n")
+        print("Script terminating_access finished.\n\n")
     except Exception as e:
-        print(f"Ошибка при выполнении скрипта: {e}\n\n")
+        print(f"Executing script error: {e}\n\n")
 
 
 schedule.every(1).hours.do(granting_access)

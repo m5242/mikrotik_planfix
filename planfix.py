@@ -16,7 +16,7 @@ def report_get_by_req_id(req_id):
         print(data["save"]["id"])
         return data["save"]["id"]
     else:
-        print(f"Код: {response.status_code}")
+        print(f"Statuscode: {response.status_code}")
         print(response.text)
 
 
@@ -47,7 +47,7 @@ def report_get_data_by_id(id, rep_id):
         ]
         return commands, task_numbers
     else:
-        print(f"Ошибка: {response.status_code}")
+        print(f"Error: {response.status_code}")
         print(response.text)
 
 
@@ -65,11 +65,11 @@ def generate_report(rep_id):
         generate_data = response.json()
 
         req_id = generate_data["requestId"]
-        print(f"Отчёт успешно создан. ID запроса: {req_id}")
+        print(f"Report created successfully. Request ID: {req_id}")
         return req_id
 
     except requests.exceptions.RequestException as e:
-        print(f"Ошибка при генерации отчёта: {str(e)}")
+        print(f"Generation report error: {str(e)}")
         return False, None
 
 
@@ -100,7 +100,7 @@ def report_get_data_by_id_for_term(id, rep_id):
 
         return commands, task_numbers
     else:
-        print(f"Ошибка: {response.status_code}")
+        print(f"Error: {response.status_code}")
         print(response.text)
         return None, None
 
@@ -134,5 +134,5 @@ def status_changing(task_id, status_id):
         return response.json()
 
     except requests.exceptions.RequestException as e:
-        print(f"Ошибка выполнения запроса: {e}")
+        print(f"Executing task failed: {e}")
         return None

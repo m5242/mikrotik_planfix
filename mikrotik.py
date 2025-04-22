@@ -8,7 +8,7 @@ def connect_via_ssh(host_ip, username, password, port=22):
         ssh.connect(host_ip, port=port, username=username, password=password)
         return ssh
     except Exception as e:
-        print(f"Ошибка подключения: {e}")
+        print(f"Cannot connect to router: {e}")
         return None
 
 
@@ -18,8 +18,8 @@ def execute_command(ssh, command):
         output = stdout.read().decode()
         error = stderr.read().decode()
         if error:
-            print(f"Ошибка: {error}")
+            print(f"Error: {error}")
         return output
     except Exception as e:
-        print(f"Ошибка при выполнении команды: {e}")
+        print(f"Error while program executed: {e}")
         return None
