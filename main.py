@@ -12,7 +12,8 @@ password = settings.password
 granting_access_report_id = settings.granting_access_report_id
 terminating_access_report_id = settings.terminating_access_report_id
 status_id_fin = settings.status_id_fin
-
+granting_access_timer = int(settings.granting_access_timer)
+terminating_access_timer = int(settings.terminating_access_timer)
 
 def granting_access():
     try:
@@ -82,8 +83,8 @@ def terminating_access():
         print(f"Executing script error: {e}\n\n")
 
 
-schedule.every(1).hours.do(granting_access)
-schedule.every(24).hours.do(terminating_access)
+schedule.every(granting_access_timer).hours.do(granting_access)
+schedule.every(terminating_access_timer).hours.do(terminating_access)
 
 
 granting_access()
